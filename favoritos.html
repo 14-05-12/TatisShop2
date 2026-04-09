@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .favs-header {
+        text-align: center;
+        padding: 60px 20px;
+        background: #fcfcfc;
+        border-bottom: 1px solid #eee;
+    }
+    .favs-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 32px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+    .favs-container {
+        max-width: 1100px;
+        margin: 40px auto 100px;
+        padding: 0 20px;
+    }
+    .favs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+    }
+    .no-favs {
+        text-align: center;
+        padding: 100px 20px;
+    }
+    .btn-shop {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 30px;
+        background: #000;
+        color: #fff;
+        text-decoration: none;
+        font-size: 12px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        transition: 0.3s;
+    }
+    .btn-shop:hover { background: #333; }
+
+    /* Estilo de card simplificado para favoritos */
+    .fav-card {
+        border: 1px solid #eee;
+        padding: 10px;
+        position: relative;
+    }
+    .fav-card img {
+        width: 100%;
+        height: 350px;
+        object-fit: cover;
+    }
+    .fav-info {
+        text-align: center;
+        padding: 15px 0;
+    }
+    .fav-remove {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        color: #e74c3c;
+        background: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+</style>
+
+<div class="favs-header">
+    <h2>Mis Favoritos</h2>
+    <p class="text-muted">Tus prendas guardadas para después</p>
+</div>
+
+<div class="favs-container">
+    {% if favoritos %}
+        <div class="favs-grid">
+            {% for fav in favoritos %}
+            <div class="fav-card">
+                <a href="{% url 'toggle_favorito' fav.producto.id_producto %}" class="fav-remove" title="Quitar">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+                
+                {% if fav.producto.imagen %}
+                    <img src="{{ fav.producto.imagen.url }}" alt="{{ fav.producto.nombre }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/500x700" alt="Sin imagen">
+                {% endif %}
+
+                <div class="fav-info">
+                    <h5 style="font-family: 'Playfair Display';">{{ fav.producto.nombre }}</h5>
+                    <p class="text-muted small">${{ fav.producto.precio }} MXN</p>
+                    <a href="{% url 'detalle_producto' fav.producto.id_producto %}" class="btn-shop" style="padding: 8px 20px;">Ver Detalle</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-favs">
+            <i class="bi bi-heart" style="font-size: 4rem; color: #eee;"></i>
+            <h4 class="mt-4">Tu lista está vacía</h4>
+            <p class="text-muted">Explora nuestra tienda y guarda lo que más te guste.</p>
+            <a href="{% url 'productos' %}" class="btn-shop">Ir a la tienda</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

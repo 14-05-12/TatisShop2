@@ -1,0 +1,288 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de Compra - Tatis Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --negro: #000; 
+            --gris-resumen: #1a1a1a; 
+            --text-muted: #888; 
+            --borde-suave: #eee; 
+        }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: #fff; color: var(--negro); }
+        
+        header { 
+            background: var(--negro); 
+            padding: 18px 8%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            color: white; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+        }
+        .logo { font-family: 'Playfair Display', serif; font-size: 24px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; color: white; }
+        .menu a { color: white; text-decoration: none; margin-left: 25px; font-size: 13px; text-transform: uppercase; font-weight: 300; letter-spacing: 1px; }
+
+        .main-container { display: flex; max-width: 1200px; margin: 60px auto; gap: 60px; padding: 0 5%; }
+        
+        .col-productos { flex: 1.8; }
+        .col-productos h2 { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .tabla-header { 
+            display: flex; 
+            border-bottom: 1px solid var(--negro); 
+            padding-bottom: 15px; 
+            font-size: 11px; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            color: var(--text-muted); 
+        }
+        .h-prod { flex: 3; } 
+        .h-talla { flex: 1; text-align: center; } 
+        .h-cant { flex: 1; text-align: center; } 
+        .h-sub { flex: 1; text-align: right; }
+
+        .producto-fila { display: flex; align-items: center; padding: 30px 0; border-bottom: 1px solid #f5f5f5; }
+        .prod-info { flex: 3; display: flex; align-items: center; gap: 20px; }
+        .prod-info img { width: 90px; height: 120px; object-fit: contain; border: 1px solid var(--borde-suave); padding: 5px; border-radius: 4px; }
+        .prod-detalles h3 { margin: 0; font-size: 14px; text-transform: uppercase; font-weight: 600; }
+        
+        .select-talla, .input-cant { padding: 8px; border: 1px solid #ddd; font-size: 13px; outline: none; border-radius: 4px; }
+        .prod-talla { flex: 1; text-align: center; } 
+        .prod-cant { flex: 1; text-align: center; }
+        
+        .prod-subtotal { 
+            flex: 1; 
+            text-align: right; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            justify-content: flex-end; 
+            gap: 15px; 
+        }
+        
+        .btn-remove { color: #ccc; font-size: 18px; text-decoration: none; transition: 0.3s; }
+        .btn-remove:hover { color: #e74c3c; }
+
+        .col-resumen { flex: 1; }
+        .card-resumen { 
+            background: var(--gris-resumen); 
+            color: #fff; 
+            padding: 40px; 
+            border-radius: 8px; 
+            position: sticky; 
+            top: 100px; 
+            display: flex;
+            flex-direction: column;
+        }
+        .card-resumen h3 { 
+            font-family: 'Playfair Display', serif; 
+            text-transform: uppercase; 
+            font-size: 20px; 
+            margin-top: 0; 
+            letter-spacing: 1px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            text-align: center;
+        }
+
+        .resumen-linea {
+            display: flex; 
+            justify-content: space-between; 
+            margin: 15px 0; 
+            font-size: 14px; 
+            color: #ccc;
+        }
+
+        .total-contenedor { 
+            margin-top: 30px; 
+            border-top: 1px solid #333; 
+            padding-top: 25px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .total-label { font-size: 12px; letter-spacing: 2px; font-weight: 300; }
+        .total-monto { font-size: 24px; font-weight: 700; color: #fff; }
+
+        .btn-pagar { 
+            background: #fff; 
+            color: #000; 
+            border: none; 
+            width: 100%; 
+            padding: 18px 0; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-size: 13px; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            display: block; 
+            text-align: center; 
+            text-decoration: none; 
+            transition: 0.3s;
+            margin-top: 35px;
+            box-sizing: border-box;
+        }
+        .btn-pagar:hover { background: #e0e0e0; transform: translateY(-2px); }
+
+        .carrito-vacio { text-align: center; padding: 100px 5%; width: 100%; }
+        .btn-tienda { display: inline-block; background: #000; color: #fff; padding: 15px 40px; text-decoration: none; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+
+        @media (max-width: 992px) {
+            .main-container { flex-direction: column; }
+            .col-resumen { order: -1; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="{% url 'inicio' %}" class="logo">TATIS SHOP</a>
+    <nav class="menu">
+        <a href="{% url 'inicio' %}">Inicio</a>
+        <a href="{% url 'productos' %}">Catálogo</a>
+        <a href="{% url 'carrito' %}">Carrito</a>
+    </nav>
+</header>
+
+<div class="main-container">
+    {% if carrito %}
+        <div class="col-productos">
+            <h2>Tu Carrito</h2>
+            <div class="tabla-header">
+                <div class="h-prod">Producto</div>
+                <div class="h-talla">Talla / Medida</div>
+                <div class="h-cant">Cant.</div>
+                <div class="h-sub">Subtotal</div>
+            </div>
+
+            {% for key, item in carrito.items %}
+            <div class="producto-fila carrito-item" data-id="{{ key }}" data-precio="{{ item.precio }}">
+                <div class="prod-info">
+                    <img src="{{ item.imagen }}" alt="{{ item.nombre }}">
+                    <div class="prod-detalles">
+                        <h3>{{ item.nombre }}</h3>
+                        <p>$<span class="precio-u">{{ item.precio }}</span> MXN</p>
+                    </div>
+                </div>
+                
+                <div class="prod-talla">
+                    <form action="{% url 'actualizar_carrito' key %}" method="POST" style="display: contents;">
+                        {% csrf_token %}
+                        <select name="talla" class="select-talla" onchange="this.form.submit()">
+                            {% if "zapato" in item.nombre|lower or "tenis" in item.nombre|lower or "bota" in item.nombre|lower or "sandalia" in item.nombre|lower or "calzado" in item.nombre|lower %}
+                                <option value="23" {% if item.talla == '23' %}selected{% endif %}>23 MX</option>
+                                <option value="24" {% if item.talla == '24' %}selected{% endif %}>24 MX</option>
+                                <option value="25" {% if item.talla == '25' %}selected{% endif %}>25 MX</option>
+                                <option value="26" {% if item.talla == '26' %}selected{% endif %}>26 MX</option>
+                                <option value="27" {% if item.talla == '27' %}selected{% endif %}>27 MX</option>
+                                <option value="28" {% if item.talla == '28' %}selected{% endif %}>28 MX</option>
+                            {% else %}
+                                <option value="S" {% if item.talla == 'S' %}selected{% endif %}>S</option>
+                                <option value="M" {% if item.talla == 'M' %}selected{% endif %}>M</option>
+                                <option value="L" {% if item.talla == 'L' %}selected{% endif %}>L</option>
+                                <option value="XL" {% if item.talla == 'XL' %}selected{% endif %}>XL</option>
+                            {% endif %}
+                        </select>
+                    </form>
+                </div>
+
+                <div class="prod-cant">
+                    <input type="number" class="input-cant input-cantidad" value="{{ item.cantidad }}" min="1" 
+                           style="width: 50px;" data-id="{{ key }}">
+                </div>
+                
+                <div class="prod-subtotal">
+                    <span>$<span class="subtotal-item" id="subtotal-{{ key }}">{{ item.subtotal }}</span> MXN</span>
+                    <a href="{% url 'eliminar_del_carrito' key %}" class="btn-remove" title="Eliminar"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-resumen">
+            <div class="card-resumen">
+                <h3>Resumen de pedido</h3>
+                
+                <div class="resumen-linea">
+                    <span>Envío estimado</span>
+                    <span style="color: #00ff00; font-weight: 600;">GRATIS</span>
+                </div>
+                <div class="resumen-linea">
+                    <span>Impuestos</span>
+                    <span>Incluidos</span>
+                </div>
+
+                <div class="total-contenedor">
+                    <span class="total-label">TOTAL</span>
+                    <span class="total-monto">$<span id="total-carrito">{{ total }}</span> MXN</span>
+                </div>
+                
+                <a href="{% url 'checkout' %}" class="btn-pagar">
+                    Finalizar Compra
+                </a>
+                
+                <a href="{% url 'productos' %}" style="display:block; text-align:center; color:#888; text-decoration:none; font-size:11px; margin-top:25px; text-transform: uppercase; letter-spacing: 1px;">
+                    ← Volver a la tienda
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <div class="carrito-vacio">
+            <i class="fa-solid fa-bag-shopping" style="font-size: 60px; color: #f0f0f0; margin-bottom: 25px;"></i>
+            <h2>Tu carrito está vacío</h2>
+            <p style="color: #888; margin-bottom: 30px;">Parece que aún no has añadido nada a tu selección.</p>
+            <a href="{% url 'productos' %}" class="btn-tienda">Explorar Catálogo</a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+document.querySelectorAll('.input-cantidad').forEach(input => {
+    input.addEventListener('change', function() {
+        const itemId = this.dataset.id;
+        const nuevaCantidad = parseInt(this.value);
+        const fila = this.closest('.carrito-item');
+        const precioUnitario = parseFloat(fila.dataset.precio);
+        
+        if (nuevaCantidad > 0) {
+            const nuevoSubtotal = precioUnitario * nuevaCantidad;
+            document.getElementById(`subtotal-${itemId}`).innerText = nuevoSubtotal.toFixed(2);
+            actualizarTotalGeneral();
+
+            const formData = new FormData();
+            formData.append('cantidad', nuevaCantidad);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch(`/actualizar_carrito/${itemId}/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+        }
+    });
+});
+
+function actualizarTotalGeneral() {
+    let nuevoTotal = 0;
+    document.querySelectorAll('.carrito-item').forEach(fila => {
+        const precio = parseFloat(fila.dataset.precio);
+        const cant = parseInt(fila.querySelector('.input-cantidad').value) || 0;
+        nuevoTotal += precio * cant;
+    });
+    document.getElementById('total-carrito').innerText = nuevoTotal.toFixed(2);
+}
+</script>
+
+</body>
+</html>

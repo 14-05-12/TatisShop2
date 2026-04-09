@@ -1,0 +1,46 @@
+{% extends "admin_custom/base_admin.html" %} {% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-0">
+                <div class="card-header bg-dark text-white p-3">
+                    <h5 class="mb-0 font-playfair"><i class="bi bi-pencil-square me-2"></i> EDITAR PROVEEDOR: {{ proveedor.nombre_marca }}</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold">NOMBRE DE LA EMPRESA</label>
+                                <input type="text" name="nombre_marca" class="form-control rounded-0" value="{{ proveedor.nombre_marca }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold">PERSONA DE CONTACTO</label>
+                                <input type="text" name="contacto" class="form-control rounded-0" value="{{ proveedor.contacto }}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold">TELÉFONO</label>
+                                <input type="text" name="telefono" class="form-control rounded-0" value="{{ proveedor.telefono }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small fw-bold">EMAIL</label>
+                                <input type="email" name="email" class="form-control rounded-0" value="{{ proveedor.email }}" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">DIRECCIÓN / NOTAS</label>
+                            <textarea name="direccion" class="form-control rounded-0" rows="3">{{ proveedor.direccion }}</textarea>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'dashboard_admin' %}" class="btn btn-outline-secondary rounded-0 px-4">CANCELAR</a>
+                            <button type="submit" class="btn btn-dark rounded-0 px-5">ACTUALIZAR DATOS</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

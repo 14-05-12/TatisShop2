@@ -1,0 +1,404 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    .detalle-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        background: #fff;
+    }
+
+    .detalle-imagen {
+        width: 100%;
+        background: #f9f9f9;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .detalle-imagen img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .detalle-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .detalle-info h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .detalle-precio {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 20px;
+    }
+
+    .status-badge {
+        font-size: 14px;
+        margin-bottom: 20px;
+        padding: 5px 0;
+    }
+
+    .detalle-descripcion {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+    }
+
+    .form-compra-detalle {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+    }
+
+    .label-detalle {
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #888;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .selector-talla-detalle, .input-resena {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    .fila-cantidad-detalle {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ddd;
+        width: fit-content;
+        border-radius: 4px;
+    }
+
+    .btn-qty-detalle {
+        padding: 10px 20px;
+        border: none;
+        background: #f8f8f8;
+        cursor: pointer;
+    }
+
+    .btn-qty-detalle:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+
+    .input-qty-detalle {
+        width: 60px;
+        text-align: center;
+        border: none;
+        font-weight: bold;
+    }
+
+    .btn-principal {
+        background: #000;
+        color: #fff;
+        padding: 18px;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-principal:hover:not(:disabled) {
+        background: #333;
+    }
+
+    .btn-principal:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    /* RESEÑAS */
+    .seccion-resenas {
+        max-width: 800px;
+        margin: 80px auto 40px auto;
+        padding: 0 20px;
+    }
+
+    .card-resena {
+        border-bottom: 1px solid #eee;
+        padding: 20px 0;
+    }
+
+    .estrellas {
+        color: #ffc107;
+        font-size: 0.9rem;
+    }
+
+    .fav-link {
+        text-align: center; 
+        color: #000; 
+        text-decoration: none; 
+        font-size: 13px; 
+        margin-top: 10px;
+        transition: 0.3s;
+        display: block;
+    }
+
+    .fav-link i.active {
+        color: #e74c3c;
+    }
+
+    /* RECOMENDADOS CON IMAGEN ABAJO */
+    .seccion-recomendados {
+        max-width: 1200px;
+        margin: 100px auto 60px auto;
+        padding: 0 20px;
+        border-top: 1px solid #f0f0f0;
+        padding-top: 60px;
+    }
+
+    .recomendados-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .recomendado-card {
+        text-decoration: none;
+        color: #000;
+        text-align: center;
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column; /* Apila elementos verticalmente */
+    }
+
+    /* Estilos para el texto (ahora arriba) */
+    .recomendado-info {
+        order: 1; /* Fuerza a estar primero */
+        margin-bottom: 15px;
+        padding: 0 10px;
+    }
+
+    .recomendado-card h4 {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .recomendado-card p {
+        font-size: 12px;
+        color: #666;
+        margin: 0;
+    }
+
+    /* Estilos para la imagen (ahora abajo) */
+    .recomendado-img-wrapper {
+        order: 2; /* Fuerza a estar segundo */
+        width: 100%;
+        height: 320px;
+        overflow: hidden;
+        background: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    .recomendado-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .recomendado-card:hover img {
+        transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+        .detalle-container { grid-template-columns: 1fr; }
+        .recomendados-grid { grid-template-columns: 1fr 1fr; }
+    }
+</style>
+
+<div class="detalle-container">
+    <div class="detalle-imagen">
+        {% if producto.imagen %}
+            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+        {% else %}
+            <img src="{% static 'img/no-image.png' %}" alt="Sin imagen">
+        {% endif %}
+    </div>
+
+    <div class="detalle-info">
+        <p style="color: #888; letter-spacing: 2px; font-size: 12px;">
+            <a href="{% url 'productos' %}" style="text-decoration: none; color: inherit;">TIENDA</a> / {{ producto.id_categoria.nombre|upper }}
+        </p>
+        <h1>{{ producto.nombre }}</h1>
+        <p class="detalle-precio">${{ producto.precio }} MXN</p>
+        
+        <div class="status-badge">
+            {% if producto.stock > 0 %}
+                <span style="color: #27ae60; font-weight: bold;">
+                    <i class="fa-solid fa-circle-check"></i> DISPONIBLE
+                </span>
+                <p style="color: #666; margin-top: 5px; font-size: 13px;">Existencias: <strong>{{ producto.stock }} unidades</strong></p>
+            {% else %}
+                <span style="color: #e74c3c; font-weight: bold;">
+                    <i class="fa-solid fa-circle-xmark"></i> AGOTADO TEMPORALMENTE
+                </span>
+                <p style="color: #999; margin-top: 5px; font-size: 13px;">Lo sentimos, no hay unidades disponibles por ahora.</p>
+            {% endif %}
+        </div>
+
+        <div class="detalle-descripcion">
+            {{ producto.descripcion|default:"Sin descripción disponible para este artículo." }}
+        </div>
+
+        <form action="{% url 'agregar_al_carrito' producto.id_producto %}" method="POST" class="form-compra-detalle">
+            {% csrf_token %}
+            
+            <div>
+                <label class="label-detalle">
+                    {% if "calzado" in producto.id_categoria.nombre|lower %}
+                        Selecciona tu Medida (MX)
+                    {% else %}
+                        Selecciona tu Talla
+                    {% endif %}
+                </label>
+                
+                <select name="talla" class="selector-talla-detalle" required {% if producto.stock <= 0 %}disabled{% endif %}>
+                    {% if "calzado" in producto.id_categoria.nombre|lower %}
+                        <option value="23">23 MX</option>
+                        <option value="24">24 MX</option>
+                        <option value="25" selected>25 MX</option>
+                        <option value="26">26 MX</option>
+                        <option value="27">27 MX</option>
+                        <option value="28">28 MX</option>
+                        <option value="29">29 MX</option>
+                    {% else %}
+                        <option value="S">Small (S)</option>
+                        <option value="M" selected>Medium (M)</option>
+                        <option value="L">Large (L)</option>
+                        <option value="XL">Extra Large (XL)</option>
+                    {% endif %}
+                </select>
+            </div>
+
+            <div>
+                <label class="label-detalle">Cantidad</label>
+                <div class="fila-cantidad-detalle">
+                    <button type="button" class="btn-qty-detalle" onclick="this.parentNode.querySelector('input').stepDown()" {% if producto.stock <= 0 %}disabled{% endif %}>-</button>
+                    <input type="number" name="cantidad" value="1" min="1" max="{{ producto.stock }}" class="input-qty-detalle" readonly>
+                    <button type="button" class="btn-qty-detalle" onclick="this.parentNode.querySelector('input').stepUp()" {% if producto.stock <= 0 %}disabled{% endif %}>+</button>
+                </div>
+            </div>
+
+            {% if producto.stock > 0 %}
+                <button type="submit" class="btn-principal">Añadir al Carrito</button>
+            {% else %}
+                <button type="button" class="btn-principal" disabled>Producto Agotado</button>
+            {% endif %}
+            
+            <a href="{% url 'toggle_favorito' producto.id_producto %}" class="fav-link">
+                <i class="fa-heart {% if es_favorito %}fa-solid active{% else %}fa-regular{% endif %}"></i> 
+                {% if es_favorito %}En Favoritos{% else %}Guardar en Favoritos{% endif %}
+            </a>
+        </form>
+    </div>
+</div>
+
+<div class="seccion-resenas">
+    <h3 style="font-family: 'Playfair Display', serif; text-align: center; margin-bottom: 40px; letter-spacing: 1px;">RESEÑAS DE CLIENTES</h3>
+
+    {% if user.is_authenticated %}
+    <div style="background: #fcfcfc; padding: 30px; border: 1px solid #eee; margin-bottom: 50px;">
+        <form action="{% url 'agregar_reseña' producto.id_producto %}" method="POST">
+            {% csrf_token %}
+            <p class="label-detalle">Deja tu comentario</p>
+            
+            <div class="mb-3">
+                <select name="calificacion" class="selector-talla-detalle" style="margin-bottom: 15px;">
+                    <option value="5">⭐⭐⭐⭐⭐ (Excelente)</option>
+                    <option value="4">⭐⭐⭐⭐ (Muy bueno)</option>
+                    <option value="3">⭐⭐⭐ (Bueno)</option>
+                    <option value="2">⭐⭐ (Regular)</option>
+                    <option value="1">⭐ (Malo)</option>
+                </select>
+                <textarea name="comentario" class="input-resena" rows="3" placeholder="Comparte tu opinión sobre este producto..." required></textarea>
+            </div>
+            
+            <button type="submit" class="btn-principal" style="padding: 10px 25px; font-size: 12px; height: auto; width: auto;">Publicar Reseña</button>
+        </form>
+    </div>
+    {% else %}
+    <p style="text-align: center; font-size: 14px; color: #888; margin-bottom: 50px;">
+        Debes <a href="#" data-bs-toggle="modal" data-bs-target="#userModal" style="color: #000; font-weight: bold;">iniciar sesión</a> para escribir una reseña.
+    </p>
+    {% endif %}
+
+    <div class="lista-comentarios">
+        {% for r in reseñas %}
+        <div class="card-resena">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-weight: bold; font-size: 13px; letter-spacing: 1px; text-transform: uppercase;">{{ r.usuario.username }}</span>
+                <span class="estrellas">
+                    {% if r.calificacion == 5 %}⭐⭐⭐⭐⭐{% elif r.calificacion == 4 %}⭐⭐⭐⭐{% elif r.calificacion == 3 %}⭐⭐⭐{% elif r.calificacion == 2 %}⭐⭐{% else %}⭐{% endif %}
+                </span>
+            </div>
+            <p style="color: #666; font-size: 14px; line-height: 1.5; margin-bottom: 5px;">{{ r.comentario }}</p>
+            <small style="color: #aaa; font-size: 11px;">{{ r.fecha|date:"d F, Y" }}</small>
+        </div>
+        {% empty %}
+        <p style="text-align: center; color: #999; font-style: italic;">No hay reseñas todavía. Sé el primero en opinar.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="seccion-recomendados">
+    <h3 style="font-family: 'Playfair Display', serif; text-align: center; letter-spacing: 2px; text-transform: uppercase; font-size: 1.3rem;">Completa tu Look</h3>
+    
+    <div class="recomendados-grid">
+        {% for similar in productos_similares %}
+            <a href="{% url 'detalle_producto' similar.id_producto %}" class="recomendado-card">
+                <div class="recomendado-info">
+                    <h4>{{ similar.nombre }}</h4>
+                    <p>${{ similar.precio }} MXN</p>
+                </div>
+                
+                <div class="recomendado-img-wrapper">
+                    {% if similar.imagen %}
+                        <img src="{{ similar.imagen.url }}" alt="{{ similar.nombre }}">
+                    {% else %}
+                        <img src="{% static 'img/no-image.png' %}" alt="Sin imagen">
+                    {% endif %}
+                </div>
+            </a>
+        {% empty %}
+            <p style="grid-column: 1/-1; text-align: center; color: #999; font-size: 13px;">Sigue explorando nuestras colecciones exclusivas.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div style="text-align: center; margin-bottom: 100px;">
+    <a href="{% url 'productos' %}" style="color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; text-decoration: none; border-bottom: 1px solid #ccc; padding-bottom: 5px;">← Volver al catálogo</a>
+</div>
+{% endblock %}

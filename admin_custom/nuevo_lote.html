@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="admin-card mx-auto" style="max-width: 600px;">
+        <h3 class="mb-4" style="font-family: 'Playfair Display';">REGISTRAR ENTRADA DE MERCANCÍA</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="small fw-bold text-muted">PRODUCTO</label>
+                <select name="producto" class="form-select rounded-0" required>
+                    {% for p in productos %}
+                    <option value="{{ p.id_producto }}">{{ p.nombre }} (Actual: {{ p.stock|default:0 }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="small fw-bold text-muted">PROVEEDOR</label>
+                <select name="proveedor" class="form-select rounded-0" required>
+                    {% for prov in proveedores %}
+                    <option value="{{ prov.id_proveedor }}">{{ prov.nombre_marca }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="small fw-bold text-muted">CANTIDAD</label>
+                    <input type="number" name="cantidad" class="form-control rounded-0" min="1" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="small fw-bold text-muted">ESTADO INICIAL</label>
+                    <select name="estado" class="form-select rounded-0">
+                        <option value="SOLICITADO">SOLICITADO (En tránsito)</option>
+                        <option value="RECIBIDO">RECIBIDO (Sumar ya al stock)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-dark rounded-0">GUARDAR REGISTRO</button>
+                <a href="{% url 'dashboard_admin' %}" class="btn btn-outline-secondary rounded-0">VOLVER</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

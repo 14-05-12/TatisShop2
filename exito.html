@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container text-center mt-5">
+    <h1 style="font-family:'Playfair Display', serif;">¡Gracias por tu compra!</h1>
+    <p>Tu pedido <strong>#{{ pedido.id }}</strong> ha sido recibido y está pendiente de pago.</p>
+    <a href="{% url 'inicio' %}" class="btn btn-dark">Volver a la tienda</a>
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .hero {
+        height: 90vh;
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1600') center/cover;
+        display: flex; align-items: center; justify-content: center; color: white; text-align: center;
+    }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: 65px; text-transform: uppercase; letter-spacing: 3px; }
+    .section-info { padding: 80px 20px; text-align: center; }
+    .section-info h2 { font-family: 'Playfair Display', serif; text-transform: uppercase; letter-spacing: 2px; }
+
+    .category-card { position: relative; overflow: hidden; height: 450px; background-color: #f8f8f8; }
+    .category-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+    .category-card:hover img { transform: scale(1.05); }
+    .category-overlay { 
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+        background: rgba(0,0,0,0.2); display: flex; align-items: flex-end; padding: 30px;
+    }
+    .category-overlay h3 { color: white; text-transform: uppercase; font-size: 24px; letter-spacing: 2px; }
+</style>
+
+<section class="hero">
+    <div>
+        <h1>TATIS SHOP ONLINE</h1>
+        <p>Minimal. Chic. Atemporal.</p>
+        <a href="{% url 'productos' %}" class="btn border-white text-white px-4 py-2 mt-3 rounded-0">VER COLECCIÓN</a>
+    </div>
+</section>
+
+<section class="section-info">
+    <h2>Explora nuestras Colecciones</h2>
+    <p class="text-muted">Prendas cuidadosamente seleccionadas para una estética limpia y moderna.</p>
+</section>
+
+<div class="container mb-5">
+    <div class="row g-4">
+        
+        <div class="col-md-4">
+            <a href="{% url 'productos' %}?categoria=Calzado" class="text-decoration-none">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=800" alt="Calzado">
+                    <div class="category-overlay"><h3>Calzado</h3></div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{% url 'productos' %}?categoria=Temporada" class="text-decoration-none">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1550639524-a6f58345a2ca?q=80&w=800" alt="Temporada">
+                    <div class="category-overlay"><h3>Temporada</h3></div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{% url 'productos' %}?categoria=Blazers" class="text-decoration-none">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800" alt="Blazers">
+                    <div class="category-overlay"><h3>Blazers</h3></div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{% url 'productos' %}?categoria=pantalones" class="text-decoration-none">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800" alt="Pantalones">
+                    <div class="category-overlay"><h3>Pantalones</h3></div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{% url 'productos' %}?categoria=Accesorios" class="text-decoration-none">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1523206489230-c012c64b2b48?q=80&w=800" alt="Accesorios">
+                    <div class="category-overlay"><h3>Accesorios</h3></div>
+                </div>
+            </a>
+        </div>
+
+        {% if categorias_globales %}
+            {% for cat in categorias_globales %}
+                {% if cat.nombre not in "Calzado Temporada Blazers pantalones Accesorios" %}
+                <div class="col-md-4">
+                    <a href="{% url 'productos' %}?categoria={{ cat.nombre }}" class="text-decoration-none">
+                        <div class="category-card">
+                            {% if cat.imagen %}
+                                <img src="{{ cat.imagen.url }}" alt="{{ cat.nombre }}">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=800" alt="{{ cat.nombre }}">
+                            {% endif %}
+                            <div class="category-overlay"><h3>{{ cat.nombre }}</h3></div>
+                        </div>
+                    </a>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

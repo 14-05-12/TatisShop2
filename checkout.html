@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .checkout-container {
+        width: 85%;
+        margin: 60px auto 80px auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+    }
+    .resumen, .auth {
+        background: white;
+        padding: 40px;
+        border: 1px solid #eee;
+    }
+    .item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #f9f9f9;
+        padding-bottom: 10px;
+    }
+    .total-box {
+        margin-top: 25px;
+        font-weight: 600;
+        text-align: right;
+        font-size: 20px;
+        font-family: 'Playfair Display', serif;
+    }
+    .auth h3 {
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 25px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+    .input-tatis {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 0;
+        box-sizing: border-box;
+    }
+    .btn-tatis {
+        width: 100%;
+        padding: 15px;
+        background: black;
+        color: white;
+        border: none;
+        letter-spacing: 2px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: 0.3s;
+    }
+    .btn-tatis:hover { background: #333; }
+    .divider {
+        text-align: center;
+        margin: 25px 0;
+        font-size: 13px;
+        color: #777;
+        position: relative;
+    }
+    .divider::before {
+        content: ""; height: 1px; background: #eee; width: 40%; position: absolute; left: 0; top: 50%;
+    }
+    .divider::after {
+        content: ""; height: 1px; background: #eee; width: 40%; position: absolute; right: 0; top: 50%;
+    }
+    @media(max-width:900px){ .checkout-container { grid-template-columns:1fr; } }
+</style>
+
+<h1 class="text-center mt-5" style="font-family:'Playfair Display', serif; letter-spacing:4px;">CHECKOUT</h1>
+
+<div class="checkout-container">
+
+    <div class="resumen">
+        <h3 style="font-family:'Playfair Display', serif; margin-bottom:30px;">RESUMEN DE COMPRA</h3>
+        <div id="lista">
+            {% for key, item in carrito.items %}
+                <div class="item">
+                    <span>{{ item.nombre }} (x{{ item.cantidad }})</span>
+                    <span>${{ item.precio }} MXN</span>
+                </div>
+            {% endfor %}
+            <div class="item text-muted" style="font-size: 13px;">
+                <span>Envío</span>
+                <span>GRATIS</span>
+            </div>
+        </div>
+        <div class="total-box">
+            Total: ${{ total }} MXN
+        </div>
+    </div>
+
+    <div class="auth">
+        {% if not user.is_authenticated %}
+            <h3>INICIAR SESIÓN</h3>
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <input type="text" name="username" class="input-tatis" placeholder="Usuario" required>
+                <input type="password" name="password" class="input-tatis" placeholder="Contraseña" required>
+                <button type="submit" class="btn-tatis">ENTRAR Y PAGAR</button>
+            </form>
+            <div class="divider">O</div>
+        {% endif %}
+
+        <h3>DATOS DE ENVÍO</h3>
+        <form action="{% url 'procesar_pago' %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="nombre" class="input-tatis" placeholder="Nombre completo" required>
+            <input type="text" name="direccion" class="input-tatis" placeholder="Calle y número" required>
+            
+            <div style="display: flex; gap: 10px;">
+                <input type="text" name="ciudad" class="input-tatis" placeholder="Ciudad" required>
+                <input type="text" name="estado" class="input-tatis" placeholder="Estado" required>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <input type="text" name="cp" class="input-tatis" placeholder="Código Postal (5 dígitos)" 
+                       pattern="\d{5}" title="El código postal debe ser de 5 números" maxlength="5" required>
+                
+                <input type="tel" name="telefono" class="input-tatis" placeholder="Teléfono" required>
+            </div>
+
+            <h3 class="mt-4">PAGO</h3>
+            <div style="margin: 0 0 20px 0; padding: 20px; border: 1px dashed #ccc; background: #fcfcfc;">
+                <p class="small mb-3 text-muted">MÉTODO: TARJETA DE CRÉDITO/DÉBITO</p>
+                <input type="text" name="tarjeta_num" class="input-tatis" placeholder="Número de tarjeta (16 dígitos)" pattern="\d{16}" maxlength="16" required>
+                <div style="display:flex; gap:10px;">
+                    <input type="text" name="tarjeta_exp" class="input-tatis" placeholder="MM/YY" pattern="\d{2}/\d{2}" maxlength="5" required>
+                    <input type="text" name="tarjeta_cvc" class="input-tatis" placeholder="CVC" pattern="\d{3,4}" maxlength="4" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-tatis">FINALIZAR PEDIDO</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

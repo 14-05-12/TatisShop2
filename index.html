@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <title>Tatis Shop | Online</title>
+</head>
+<body>
+    <div class="header">
+        <h1>Tatis Shop Online</h1>
+    </div>
+    <div class="grid-productos">
+        {% for p in productos %}
+        <div class="card">
+            <h3>{{ p.nombre }}</h3>
+            <p>Talla: {{ p.talla }} | Color: {{ p.color }}</p>
+            <p><strong>${{ p.precio }}</strong></p>
+        </div>
+        {% empty %}
+        <p>No hay productos registrados aún.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,432 @@
+{% extends 'admin_custom/base_admin.html' %}
+{% block content %}
+<style>
+    /* Estructura Base de Alto Rendimiento */
+    .admin-layout { 
+        display: flex; 
+        min-height: 100vh; 
+        background-color: #f8f9fa; 
+        margin: 0; 
+        padding: 0; 
+    }
+    
+    /* Sidebar Minimalista */
+    .sidebar { 
+        width: 240px; 
+        background: #ffffff; 
+        border-right: 1px solid #e9ecef; 
+        padding: 40px 15px; 
+        position: fixed; 
+        height: 100vh; 
+        z-index: 1000; 
+        left: 0; 
+        top: 0;
+    }
+    
+    .sidebar-brand {
+        font-family: 'Playfair Display', serif; 
+        font-size: 20px; 
+        font-weight: 800;
+        letter-spacing: 2px; 
+        color: #000; 
+        text-decoration: none; 
+        display: block;
+        text-align: center; 
+        margin-bottom: 50px; 
+        text-transform: uppercase;
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+        margin-inline: 10px;
+    }
+
+    .nav-list-v { list-style: none; padding: 0; margin: 0; }
+    .nav-link-v {
+        display: flex; 
+        align-items: center; 
+        padding: 12px 18px; 
+        color: #6c757d;
+        text-decoration: none; 
+        font-size: 11px; 
+        font-weight: 700; 
+        text-transform: uppercase;
+        letter-spacing: 0.8px; 
+        transition: all 0.3s ease; 
+        border-radius: 6px; 
+        margin-bottom: 4px;
+    }
+    .nav-link-v i { margin-right: 12px; font-size: 16px; }
+    .nav-link-v:hover { background: #f8f9fa; color: #000; transform: translateX(5px); }
+    .nav-link-v.active { background: #000; color: #fff !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+    /* Contenido Principal Expandido */
+    .main-content { 
+        flex: 1; 
+        margin-left: 240px; 
+        padding: 40px; 
+        width: calc(100% - 240px);
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .panel-title { 
+        font-family: 'Playfair Display', serif; 
+        font-size: 26px; 
+        font-weight: 700;
+        color: #1a1a1a;
+        margin: 0;
+    }
+
+    /* Card Premium */
+    .admin-card { 
+        background: #ffffff; 
+        border-radius: 12px; 
+        padding: 35px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    /* Tabs Modernos */
+    .nav-tabs { border-bottom: 1px solid #e9ecef; margin-bottom: 20px; gap: 5px; }
+    .nav-tabs .nav-link { 
+        color: #adb5bd; 
+        font-weight: 700; 
+        border: none; 
+        padding: 12px 20px; 
+        text-transform: uppercase; 
+        font-size: 10px; 
+        letter-spacing: 1px; 
+        background: none;
+        transition: 0.3s;
+    }
+    .nav-tabs .nav-link:hover { color: #000; }
+    .nav-tabs .nav-link.active { color: #000; border-bottom: 3px solid #000; }
+
+    /* Tablas de Alta Visibilidad */
+    .table-custom { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+    .table-custom th { 
+        text-align: left; 
+        padding: 12px 15px; 
+        text-transform: uppercase; 
+        font-size: 10px; 
+        color: #9da4aa; 
+        letter-spacing: 1px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .table-custom tbody tr { transition: transform 0.2s; }
+    .table-custom tbody tr:hover { background: #fcfcfc; }
+    .table-custom td { 
+        padding: 16px 15px; 
+        font-size: 13px; 
+        color: #444;
+        border-bottom: 1px solid #f8f9fa;
+    }
+    
+    .status-badge { 
+        padding: 6px 12px; 
+        font-size: 9px; 
+        font-weight: 800; 
+        text-transform: uppercase; 
+        border-radius: 50px; 
+        letter-spacing: 0.5px;
+    }
+    .bg-success-light { background: #e8f5e9; color: #2e7d32; }
+    .bg-danger-light { background: #ffebee; color: #c62828; }
+    .bg-info-light { background: #e3f2fd; color: #1565c0; }
+
+    .img-thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
+</style>
+
+<div class="admin-layout">
+    <aside class="sidebar">
+        <a href="#" class="sidebar-brand">TATIS SHOP</a>
+        <ul class="nav-list-v">
+            <li><a href="{% url 'dashboard_admin' %}" class="nav-link-v active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+            <li><a href="{% url 'admin_pedidos' %}" class="nav-link-v"><i class="bi bi-bag-heart"></i> Gestionar Pedidos</a></li>
+            <li><a href="{% url 'agregar_producto' %}" class="nav-link-v"><i class="bi bi-plus-circle"></i> Agregar Producto</a></li>
+            <li><a href="{% url 'nueva_categoria' %}" class="nav-link-v"><i class="bi bi-tags"></i> Nueva Categoría</a></li>
+            <li><a href="{% url 'nuevo_proveedor' %}" class="nav-link-v"><i class="bi bi-truck"></i> Nuevo Proveedor</a></li>
+            <li style="margin-top: 50px;"><a href="{% url 'logout' %}" class="nav-link-v text-danger"><i class="bi bi-power"></i> Cerrar Sesión</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="panel-header">
+            <h2 class="panel-title">Panel de Control</h2>
+            <span class="text-muted" style="font-size: 12px; font-weight: 600;">Bienvenido, Administrador</span>
+        </div>
+
+        <div class="admin-card">
+            <ul class="nav nav-tabs" id="adminTab" role="tablist">
+                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#productos">Inventario</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#historial">Historial Total</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#clientes">Clientes</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#embarques">Embarques/Lotes</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#resenas">Reseñas</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#proveedores">Proveedores</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#categorias_tab">Categorías</button></li>
+            </ul>
+
+            <div class="tab-content">
+                
+                <div class="tab-pane fade show active py-3" id="productos">
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Producto</th>
+                                <th>Precio Unitario</th>
+                                <th>Stock</th>
+                                <th>Categoría</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in productos %}{% if p.stock > 0 %}
+                            <tr>
+                                <td class="fw-bold" style="color: #222;">{{ p.nombre }}</td>
+                                <td><span class="fw-bold">${{ p.precio }}</span> <small class="text-muted">MXN</small></td>
+                                <td>
+                                    {% if p.stock <= 5 %}
+                                        <span class="text-danger fw-bold"><i class="bi bi-arrow-down-circle-fill"></i> {{ p.stock }} pzas</span>
+                                    {% else %}
+                                        <span class="text-success fw-bold">{{ p.stock }} pzas</span>
+                                    {% endif %}
+                                </td>
+                                <td><span class="status-badge bg-info-light">{{ p.id_categoria.nombre|default:"General" }}</span></td>
+                                <td>
+                                    <a href="{% url 'editar_producto' p.id_producto %}" class="btn btn-sm btn-outline-dark border-0">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endif %}{% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane fade py-3" id="historial">
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th>Vista</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Existencia</th>
+                                <th>Estado</th>
+                                <th>Editar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in productos %}
+                            <tr>
+                                <td>
+                                    {% if p.imagen %}
+                                        <img src="{{ p.imagen.url }}" class="img-thumb">
+                                    {% else %}
+                                        <div class="img-thumb" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center;"><i class="bi bi-image text-muted"></i></div>
+                                    {% endif %}
+                                </td>
+                                <td class="fw-bold">{{ p.nombre }}</td>
+                                <td>{{ p.id_categoria.nombre|default:"General" }}</td>
+                                <td>{{ p.stock|default:"0" }}</td>
+                                <td>
+                                    {% if p.stock > 0 %}
+                                        <span class="status-badge bg-success-light">Disponible</span>
+                                    {% else %}
+                                        <span class="status-badge bg-danger-light">Agotado</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'editar_producto' p.id_producto %}" class="text-dark">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane fade py-3" id="clientes">
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th>Nombre de Usuario</th>
+                                <th>Correo Electrónico</th>
+                                <th>Fecha de Registro</th>
+                                <th>Perfil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in clientes %}
+                            <tr>
+                                <td class="fw-bold">{{ c.username }}</td>
+                                <td>{{ c.email }}</td>
+                                <td><i class="bi bi-calendar3 me-2 text-muted"></i>{{ c.date_joined|date:"d/m/Y" }}</td>
+                                <td><span class="status-badge bg-light">Cliente Activo</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane fade py-3" id="embarques">
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="{% url 'nuevo_lote' %}" class="btn btn-dark btn-sm px-4 rounded-pill" style="font-size: 11px; font-weight: 700;">
+                            <i class="bi bi-plus-lg me-2"></i> REGISTRAR NUEVO LOTE
+                        </a>
+                    </div>
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Estatus de Envío</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in embarques %}
+                            <tr>
+                                <td class="font-monospace fw-bold text-primary">#{{ e.id_lote }}</td>
+                                <td>{{ e.producto.nombre }}</td>
+                                <td class="fw-bold">{{ e.cantidad }} unidades</td>
+                                <td>
+                                    <span class="status-badge {% if e.estado == 'ENTREGADO' %}bg-success-light text-success{% else %}bg-warning text-dark{% endif %}" style="background-color: #f8f9fa;">
+                                        {{ e.estado }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if e.estado != 'ENTREGADO' %}
+                                        <a href="{% url 'marcar_recibido' e.id_lote %}" class="btn btn-sm btn-dark rounded-pill px-3" style="font-size: 9px; font-weight: 800;">RECIBIR STOCK</a>
+                                    {% else %}
+                                        <i class="bi bi-check-all text-success fs-5"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane fade py-3" id="resenas">
+                    <div class="row g-4">
+                        {% for r in reseñas %}
+                        <div class="col-md-4">
+                            <div class="p-4 border-0 bg-light rounded-4" style="min-height: 150px;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold" style="font-size: 12px; letter-spacing: 0.5px;">@{{ r.usuario.username }}</span>
+                                    <div class="text-warning">
+                                        {% if r.calificacion == 5 %} ★★★★★ {% elif r.calificacion == 4 %} ★★★★☆ {% else %} ★★★☆☆ {% endif %}
+                                    </div>
+                                </div>
+                                <h6 class="text-dark mb-2" style="font-size: 13px;">{{ r.producto.nombre }}</h6>
+                                <p class="text-muted mb-0" style="font-size: 12.5px; line-height: 1.6; font-style: italic;">"{{ r.comentario }}"</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12 text-center py-5">
+                            <i class="bi bi-chat-left-dots text-muted fs-1 d-block mb-3"></i>
+                            <p class="text-muted">Aún no se han recibido reseñas de clientes.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="tab-pane fade py-3" id="proveedores">
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th>Nombre de la Marca</th>
+                                <th>Correo de Contacto</th>
+                                <th>Teléfono / WhatsApp</th>
+                                <th>Gestión</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prov in proveedores %}
+                            <tr>
+                                <td class="fw-bold" style="font-size: 14px;">{{ prov.nombre_marca }}</td>
+                                <td class="text-muted">{{ prov.email|default:"No registrado" }}</td>
+                                <td>{{ prov.telefono|default:"-" }}</td>
+                                <td>
+                                    <a href="{% url 'editar_proveedor' prov.id_proveedor %}" class="btn btn-sm btn-outline-primary border-0 me-2"><i class="bi bi-pencil-square"></i></a>
+                                    <a href="{% url 'eliminar_proveedor' prov.id_proveedor %}" class="btn btn-sm btn-outline-danger border-0" onclick="return confirm('¿Seguro que desea eliminar este proveedor?')"><i class="bi bi-trash"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane fade py-3" id="categorias_tab">
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="{% url 'nueva_categoria' %}" class="btn btn-dark btn-sm px-4 rounded-pill" style="font-size: 11px; font-weight: 700;">
+                            <i class="bi bi-plus-lg me-2"></i> NUEVA CATEGORÍA
+                        </a>
+                    </div>
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre de la Categoría</th>
+                                <th>Productos Vinculados</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cat in categorias %}
+                            <tr>
+                                <td class="text-muted font-monospace">#{{ cat.id_categoria }}</td>
+                                <td class="fw-bold" style="font-size: 14px;">{{ cat.nombre }}</td>
+                                <td>
+                                    <span class="badge rounded-pill bg-light text-dark border fw-normal" style="font-size: 10px;">
+                                        {{ cat.producto_set.count }} Artículos
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <a href="{% url 'eliminar_categoria' cat.id_categoria %}" 
+                                       class="btn btn-sm btn-outline-danger border-0" 
+                                       onclick="return confirm('¿Está seguro de eliminar la categoría {{ cat.nombre }}? Solo se eliminará si no tiene productos.');">
+                                         <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted italic">No hay categorías registradas.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // Persistencia de Pestañas al recargar
+    document.addEventListener("DOMContentLoaded", function() {
+        var hash = window.location.hash;
+        if (hash) {
+            var triggerEl = document.querySelector('button[data-bs-target="' + hash + '"]');
+            if (triggerEl) bootstrap.Tab.getOrCreateInstance(triggerEl).show();
+        }
+        
+        // Actualizar URL al cambiar pestaña
+        var tabButtons = document.querySelectorAll('button[data-bs-toggle="tab"]');
+        tabButtons.forEach(btn => {
+            btn.addEventListener('shown.bs.tab', function(e) {
+                window.location.hash = e.target.getAttribute('data-bs-target');
+            });
+        });
+    });
+</script>
+{% endblock %}

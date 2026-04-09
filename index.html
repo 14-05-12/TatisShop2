@@ -1,25 +1,191 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tatis Shop | Online</title>
+    <style>
+        /* ========== ESTILOS PRINCIPALES (equivalente a estilos.css) ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            background: #f5f7fc;
+            color: #1e2a3a;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0f2b3d, #1b4a6e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* Grid de productos */
+        .grid-productos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Tarjeta individual */
+        .card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #0c4e6e;
+            letter-spacing: -0.3px;
+            border-left: 4px solid #f59e0b;
+            padding-left: 0.75rem;
+        }
+
+        .card p {
+            margin: 0.4rem 0;
+            color: #2c3e44;
+            font-size: 0.95rem;
+        }
+
+        .card p strong {
+            font-size: 1.3rem;
+            color: #e67e22;
+            font-weight: 800;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        /* Pequeño detalle de precio */
+        .card p:last-of-type {
+            margin-top: 0.6rem;
+        }
+
+        /* mensaje vacío (por si acaso, pero siempre habrá productos) */
+        .grid-productos > p {
+            grid-column: 1 / -1;
+            text-align: center;
+            background: #fff3e0;
+            padding: 2rem;
+            border-radius: 2rem;
+            font-size: 1.1rem;
+            color: #a15e00;
+        }
+
+        /* footer opcional para dar calidez */
+        .footer-note {
+            text-align: center;
+            margin-top: 3.5rem;
+            font-size: 0.85rem;
+            color: #6c86a3;
+            border-top: 1px solid #dce5f0;
+            padding-top: 2rem;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1.2rem;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .card h3 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Tatis Shop Online</h1>
+
+<div class="header">
+    <h1>🛍️ Tatis Shop Online</h1>
+</div>
+
+<div class="grid-productos">
+    <!-- ========== PRODUCTOS PREDETERMINADOS (SIN BASE DE DATOS) ========== -->
+    <div class="card">
+        <h3>Camiseta Oversized</h3>
+        <p>Talla: M | Color: Negro</p>
+        <p><strong>$29.990</strong></p>
     </div>
-    <div class="grid-productos">
-        {% for p in productos %}
-        <div class="card">
-            <h3>{{ p.nombre }}</h3>
-            <p>Talla: {{ p.talla }} | Color: {{ p.color }}</p>
-            <p><strong>${{ p.precio }}</strong></p>
-        </div>
-        {% empty %}
-        <p>No hay productos registrados aún.</p>
-        {% endfor %}
+
+    <div class="card">
+        <h3>Pantalón Cargo</h3>
+        <p>Talla: L | Color: Caqui</p>
+        <p><strong>$45.500</strong></p>
     </div>
+
+    <div class="card">
+        <h3>Chaqueta Denim</h3>
+        <p>Talla: XL | Color: Azul lavado</p>
+        <p><strong>$69.900</strong></p>
+    </div>
+
+    <div class="card">
+        <h3>Zapatillas Urban</h3>
+        <p>Talla: 42 | Color: Blanco/Rojo</p>
+        <p><strong>$79.990</strong></p>
+    </div>
+
+    <div class="card">
+        <h3>Gorra Trucker</h3>
+        <p>Talla: Única | Color: Beige</p>
+        <p><strong>$15.990</strong></p>
+    </div>
+
+    <div class="card">
+        <h3>Sudadera Hoodie</h3>
+        <p>Talla: S | Color: Gris Melange</p>
+        <p><strong>$52.500</strong></p>
+    </div>
+
+    <div class="card">
+        <h3>Camisa Lino</h3>
+        <p>Talla: M | Color: Blanco Natural</p>
+        <p><strong>$38.900</strong></p>
+    </div>
+
+    <div class="card">
+        <h3>Short Deportivo</h3>
+        <p>Talla: L | Color: Azul marino</p>
+        <p><strong>$24.990</strong></p>
+    </div>
+</div>
+
+<div class="footer-note">
+    ✨ Colección verano 2025 · Envíos a todo el país ✨
+</div>
+
 </body>
 </html>
